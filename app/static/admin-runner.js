@@ -47,18 +47,19 @@ function activateTab(name) {
   const bug = document.getElementById('tabBugAnalysis');
   const isAdminTab = name === 'admin';
   const isBugTab = name === 'bug';
+  const isPublishedTab = name === 'published';
 
   if (published) {
-    published.style.background = (isAdminTab || isBugTab) ? '#475569' : '#0ea5e9';
-    published.style.color = (isAdminTab || isBugTab) ? '#e2e8f0' : '#0f172a';
+    published.style.background = isPublishedTab ? '#4a90e2' : '#2a4c70';
+    published.style.color = '#ffffff';
   }
   if (admin && PSLDashboardState.adminMode) {
-    admin.style.background = isAdminTab ? '#0ea5e9' : '#475569';
-    admin.style.color = isAdminTab ? '#0f172a' : '#e2e8f0';
+    admin.style.background = isAdminTab ? '#4a90e2' : '#2a4c70';
+    admin.style.color = '#ffffff';
   }
   if (bug) {
-    bug.style.background = isBugTab ? '#0ea5e9' : '#475569';
-    bug.style.color = isBugTab ? '#0f172a' : '#e2e8f0';
+    bug.style.background = isBugTab ? '#4a90e2' : '#2a4c70';
+    bug.style.color = '#ffffff';
   }
 
   for (const type of PSLDashboardState.sectionTypes) {
