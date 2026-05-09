@@ -145,6 +145,9 @@ async function fetchBugData() {
     }
     BugAnalysisState.bugsCache = Array.isArray(data.rows) ? data.rows : [];
 
+    // Populate AgileTeam dropdown with distinct teams from loaded bugs
+    populateBugTeamDropdown();
+
     // Always apply current UI filters so default status filter is respected on initial load.
     applyBugFilter();
 
@@ -412,15 +415,32 @@ async function fetchReopenedTestData() {
 }
 
 function applyBugFilter() {
-  const teamFilter = (document.getElementById('bugTeamFilter')?.value || '').trim().toLowerCase();
+  const teamFilter = (document.getElementById('bugTeamFilter')?.value || '').trim();
+  const testTypeFilter = (document.getElementById('bugTestTypeFilter')?.value || '').trim().toLowerCase();
   const statusFilter = (document.getElementById('bugStatusFilter')?.value || '').trim().toLowerCase();
   const severityFilter = (document.getElementById('bugSeverityFilter')?.value || '').trim().toLowerCase();
 
   let filtered = BugAnalysisState.bugsCache.slice();
 
+  // Filter by AgileTeam (exact match from dropdown)
   if (teamFilter) {
-    filtered = filtered.filter(b => b.agileTeam.toLowerCase().includes(teamFilter));
+    filtered = filtered.filter(b => b.agileTeam === teamFilter);
   }
+
+  // Filter by Test Type
+  if (testTypeFilter) {
+    filtered = filtered.filter(b => {
+      if (testTypeFilter === 'sanity') {
+        return Number(b.linkedSanityCount || 0) > 0;
+      } else if (testTypeFilter === 'smoke') {
+        return Number(b.linkedSmokeCount || 0) > 0;
+      } else if (testTypeFilter === 'regression') {
+        return Number(b.linkedRegressionCount || 0) > 0;
+      }
+      return true;
+    });
+  }
+
   if (statusFilter) {
     filtered = filtered.filter(b => b.status.toLowerCase() === statusFilter);
   }
@@ -430,6 +450,32 @@ function applyBugFilter() {
 
   BugAnalysisState.filteredBugs = filtered;
   renderBugAnalysisDashboard(filtered);
+}
+
+function populateBugTeamDropdown() {
+  const dropdown = document.getElementById('bugTeamFilter');
+  if (!dropdown) return;
+
+  // Extract distinct teams from bugsCache
+  const teams = new Set(BugAnalysisState.bugsCache.map(b => b.agileTeam).filter(t => t));
+  const sortedTeams = Array.from(teams).sort();
+
+  // Preserve current selection
+  const currentValue = dropdown.value;
+
+  // Clear and rebuild options
+  dropdown.innerHTML = '<option value="">All Teams</option>';
+  for (const team of sortedTeams) {
+    const option = document.createElement('option');
+    option.value = team;
+    option.textContent = team;
+    dropdown.appendChild(option);
+  }
+
+  // Restore selection if still valid
+  if (currentValue && sortedTeams.includes(currentValue)) {
+    dropdown.value = currentValue;
+  }
 }
 
 function downloadBugsCsv() {

@@ -325,8 +325,12 @@
 
       <!-- Controls & Filters -->
       <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;">
-        <input id="bugTeamFilter" type="text" placeholder="Filter by AgileTeam…"
-          style="flex:1; min-width:200px; padding:10px 12px; border-radius:8px; font-size:13px; border:1px solid var(--border); background:var(--bg); color:var(--text);" />
+        <select id="bugTeamFilter" style="padding:10px 12px; border-radius:8px; border:1px solid var(--border); background:var(--bg); color:var(--text); min-width:180px;">
+          <option value="">All Teams</option>
+        </select>
+        <select id="bugTestTypeFilter" style="padding:10px 12px; border-radius:8px; border:1px solid var(--border); background:var(--bg); color:var(--text); min-width:180px;">
+          <option value="">All Test Types</option><option value="Sanity">Sanity</option><option value="Smoke">Smoke</option><option value="Regression">Regression</option>
+        </select>
         <select id="bugStatusFilter" style="padding:10px 12px; border-radius:8px; border:1px solid var(--border); background:var(--bg); color:var(--text);">
           <option value="">All Status</option><option value="Open">Open</option><option value="In Progress">In Progress</option><option value="Closed">Closed</option>
         </select>
