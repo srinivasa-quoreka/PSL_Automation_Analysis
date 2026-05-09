@@ -17,4 +17,5 @@ trace_*.py
 verify_*.py
 find_*.py
 final_*.py
-test_*.py
+test_*.pycert.pem
+key.pem
