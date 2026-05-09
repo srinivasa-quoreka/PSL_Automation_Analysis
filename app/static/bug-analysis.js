@@ -416,7 +416,7 @@ async function fetchReopenedTestData() {
 
 function applyBugFilter() {
   const teamFilter = (document.getElementById('bugTeamFilter')?.value || '').trim();
-  const testTypeFilter = (document.getElementById('bugTestTypeFilter')?.value || '').trim().toLowerCase();
+  const testTypeFilter = (document.getElementById('bugTestTypeFilter')?.value || '').trim();
   const statusFilter = (document.getElementById('bugStatusFilter')?.value || '').trim().toLowerCase();
   const severityFilter = (document.getElementById('bugSeverityFilter')?.value || '').trim().toLowerCase();
 
@@ -430,11 +430,11 @@ function applyBugFilter() {
   // Filter by Test Type
   if (testTypeFilter) {
     filtered = filtered.filter(b => {
-      if (testTypeFilter === 'sanity') {
+      if (testTypeFilter === 'Sanity') {
         return Number(b.linkedSanityCount || 0) > 0;
-      } else if (testTypeFilter === 'smoke') {
+      } else if (testTypeFilter === 'Smoke') {
         return Number(b.linkedSmokeCount || 0) > 0;
-      } else if (testTypeFilter === 'regression') {
+      } else if (testTypeFilter === 'Regression') {
         return Number(b.linkedRegressionCount || 0) > 0;
       }
       return true;
