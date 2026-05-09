@@ -5,10 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Quoreka - Test Automation Dashboard</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
-  <script src="/static/app-shell.js?v=20260508b"></script>
-  <script src="/static/published-data.js?v=20260508b"></script>
-  <script src="/static/admin-runner.js?v=20260508b"></script>
-  <script src="/static/bug-analysis.js?v=20260508b"></script>
+  <script src="/static/app-shell.js?v=20260509a"></script>
+  <script src="/static/published-data.js?v=20260509a"></script>
+  <script src="/static/admin-runner.js?v=20260509a"></script>
+  <script src="/static/bug-analysis.js?v=20260509a"></script>
+  <script src="/static/executive-dashboard.js?v=20260509a"></script>
   <style>
     :root {
       --bg: #0a1829;
@@ -170,6 +171,7 @@
     <button id="tabPublished" onclick="if (typeof activateTab === 'function') activateTab('published')" style="background: var(--accent); color: #ffffff;">Published Data</button>
     <button id="tabAdmin" onclick="if (typeof activateTab === 'function') activateTab('admin')" style="display:none; background: #2a4c70; color: #ffffff;">Admin Runner</button>
     <button id="tabBugAnalysis" onclick="if (typeof activateTab === 'function') activateTab('bug')" style="background: #2a4c70; color: #ffffff;">Bug Analysis</button>
+    <button id="tabExecutive" onclick="if (typeof activateTab === 'function') activateTab('executive')" style="background: #2a4c70; color: #ffffff;">Executive Reports</button>
   </div>
 
   <div id="err" class="err" style="display:none"></div>
@@ -378,6 +380,65 @@
         </table>
       </div>
       <div id="reopenedTableEmpty" style="color:var(--muted); font-size:13px; padding:8px 0; display:none;">No re-opened test cases found.</div>
+    </div>
+  </div>
+
+  <!-- ── EXECUTIVE SECTION ───────────────────────────────────── -->
+  <div id="executiveSection" style="display:none;">
+    <div class="card" style="margin-bottom:20px;">
+      <div class="row" style="margin-bottom:10px;">
+        <h2 style="margin:0;">Program Coverage Progress</h2>
+      </div>
+
+      <div class="sub" style="margin-bottom:12px;">
+        Backlog targets can be edited below. Coverage = Automated / Backlog.
+      </div>
+
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;">
+        <input id="execBacklogJql" type="text"
+          placeholder="Backlog JQL (all tests)"
+          style="flex:1; min-width:320px; padding:10px 12px; border-radius:8px; font-size:13px; border:1px solid var(--border); background:var(--bg); color:var(--text);" />
+      </div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;">
+        <input id="execBugJql" type="text"
+          placeholder="Bug JQL (bugs linked to tests)"
+          style="flex:1; min-width:320px; padding:10px 12px; border-radius:8px; font-size:13px; border:1px solid var(--border); background:var(--bg); color:var(--text);" />
+      </div>
+
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; align-items:center;">
+        <label for="targetSanity" style="font-size:12px; color:var(--muted);">Sanity Backlog</label>
+        <input id="targetSanity" type="text" value="250" style="width:90px;" />
+        <label for="targetSmoke" style="font-size:12px; color:var(--muted);">Smoke Backlog</label>
+        <input id="targetSmoke" type="text" value="600" style="width:90px;" />
+        <label for="targetRegression" style="font-size:12px; color:var(--muted);">Regression Backlog</label>
+        <input id="targetRegression" type="text" value="3000" style="width:100px;" />
+        <button id="saveCoverageTargetsBtn" style="padding:10px 16px; white-space:nowrap; background:#64748b; color:#e2e8f0;">Save Config</button>
+        <button id="reloadExecutiveBtn" style="padding:10px 16px; white-space:nowrap;">Refresh Report</button>
+      </div>
+
+      <div id="execStatus" style="display:none; padding:8px 12px; border-radius:6px; margin-bottom:12px; font-size:13px;"></div>
+
+      <div id="execKpis" class="stats"></div>
+
+      <div class="card" style="margin-bottom:12px; padding:12px;">
+        <h2 style="margin-bottom:8px;">Coverage By Test Type</h2>
+        <canvas id="execCoverageChart" height="140"></canvas>
+      </div>
+
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Test Type</th>
+              <th>Backlog</th>
+              <th>Automated</th>
+              <th>Remaining</th>
+              <th>Coverage %</th>
+            </tr>
+          </thead>
+          <tbody id="execCoverageRows"></tbody>
+        </table>
+      </div>
     </div>
   </div>
 

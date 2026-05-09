@@ -45,9 +45,11 @@ function activateTab(name) {
   const published = document.getElementById('tabPublished');
   const admin = document.getElementById('tabAdmin');
   const bug = document.getElementById('tabBugAnalysis');
+  const executive = document.getElementById('tabExecutive');
   const isAdminTab = name === 'admin';
   const isBugTab = name === 'bug';
   const isPublishedTab = name === 'published';
+  const isExecutiveTab = name === 'executive';
 
   if (published) {
     published.style.background = isPublishedTab ? '#4a90e2' : '#2a4c70';
@@ -61,6 +63,10 @@ function activateTab(name) {
     bug.style.background = isBugTab ? '#4a90e2' : '#2a4c70';
     bug.style.color = '#ffffff';
   }
+  if (executive) {
+    executive.style.background = isExecutiveTab ? '#4a90e2' : '#2a4c70';
+    executive.style.color = '#ffffff';
+  }
 
   for (const type of PSLDashboardState.sectionTypes) {
     const panel = document.getElementById(type.toLowerCase() + 'AdminPanel');
@@ -71,12 +77,21 @@ function activateTab(name) {
 
   const testStepSection = document.getElementById('testStepSection');
   if (testStepSection) {
-    testStepSection.style.display = isBugTab ? 'none' : 'block';
+    testStepSection.style.display = (isBugTab || isExecutiveTab) ? 'none' : 'block';
   }
 
   const bugAnalysisSection = document.getElementById('bugAnalysisSection');
   if (bugAnalysisSection) {
     bugAnalysisSection.style.display = isBugTab ? 'block' : 'none';
+  }
+
+  const executiveSection = document.getElementById('executiveSection');
+  if (executiveSection) {
+    executiveSection.style.display = isExecutiveTab ? 'block' : 'none';
+  }
+
+  if (isExecutiveTab && typeof loadExecutiveCoverageReport === 'function') {
+    loadExecutiveCoverageReport();
   }
 }
 
@@ -92,6 +107,8 @@ const universalRefresh = function() {
     if (typeof fetchReopenedTestData === 'function') {
       fetchReopenedTestData();
     }
+  } else if (currentActiveTab === 'executive' && typeof loadExecutiveCoverageReport === 'function') {
+    loadExecutiveCoverageReport();
   }
 };
 
@@ -165,6 +182,7 @@ function initAdminRunner() {
   document.getElementById('tabPublished')?.addEventListener('click', () => activateTab('published'));
   document.getElementById('tabAdmin')?.addEventListener('click', () => activateTab('admin'));
   document.getElementById('tabBugAnalysis')?.addEventListener('click', () => activateTab('bug'));
+  document.getElementById('tabExecutive')?.addEventListener('click', () => activateTab('executive'));
   
   // Wire refresh button to universal refresh function
   document.getElementById('refresh')?.addEventListener('click', universalRefresh);

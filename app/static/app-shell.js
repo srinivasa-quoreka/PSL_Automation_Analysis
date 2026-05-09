@@ -82,6 +82,9 @@ document.addEventListener('DOMContentLoaded', function () {
   initPublishedData();
   initAdminRunner();
   initBugAnalysis();
+  if (typeof initExecutiveDashboard === 'function') {
+    initExecutiveDashboard();
+  }
 });
 
 window.isAdminUser = isAdminUser;
