@@ -613,4 +613,21 @@ def admin_publish(payload: PublishRequest, _: None = Depends(_require_admin)) ->
 if __name__ == "__main__":
     import uvicorn
     port = int(os.getenv("PORT", "8000"))
-    uvicorn.run("app.main:app", host="0.0.0.0", port=port, reload=False)
+    
+    # Check if SSL certificate files exist
+    cert_file = Path(__file__).parent.parent / "cert.pem"
+    key_file = Path(__file__).parent.parent / "key.pem"
+    use_ssl = cert_file.exists() and key_file.exists()
+    
+    if use_ssl:
+        uvicorn.run(
+            "app.main:app",
+            host="0.0.0.0",
+            port=port,
+            reload=False,
+            ssl_certfile=str(cert_file),
+            ssl_keyfile=str(key_file),
+            ssl_version=17  # TLS 1.2
+        )
+    else:
+        uvicorn.run("app.main:app", host="0.0.0.0", port=port, reload=False)
