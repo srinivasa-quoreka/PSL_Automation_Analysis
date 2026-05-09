@@ -94,7 +94,7 @@
     }
     .modal-backdrop {
       position: fixed;
-      inset: 0;0, 24, 41, 0.85
+      inset: 0;
       background: rgba(15, 23, 42, 0.72);
       display: flex;
       align-items: center;
@@ -199,7 +199,7 @@
     </div>
     <div id="sanityAdminPanel" style="display:none; margin-bottom:12px;">
       <div style="display:flex; gap:8px; flex-wrap:wrap;">
-        <input id="sanityJql" type="text" placeholder="Enter JQL for Sanity tests…"2a4c70; color:#ffffff
+        <input id="sanityJql" type="text" placeholder="Enter JQL for Sanity tests…"
           style="flex:1; min-width:300px; padding:10px 12px; border-radius:8px; font-size:13px;" />
         <button id="runSanityBtn" style="padding:10px 16px; white-space:nowrap;">Run &amp; Publish</button>
         <button id="saveSanityBtn" style="padding:10px 16px; white-space:nowrap; background:#64748b; color:#e2e8f0;">Save Query</button>
@@ -237,7 +237,7 @@
     </div>
     <div id="smokeAdminPanel" style="display:none; margin-bottom:12px;">
       <div style="display:flex; gap:8px; flex-wrap:wrap;">
-        <input id="smokeJql" type="text" placeholder="Enter JQL for Smoke tests…"2a4c70; color:#ffffff
+        <input id="smokeJql" type="text" placeholder="Enter JQL for Smoke tests…"
           style="flex:1; min-width:300px; padding:10px 12px; border-radius:8px; font-size:13px;" />
         <button id="runSmokeBtn" style="padding:10px 16px; white-space:nowrap;">Run &amp; Publish</button>
         <button id="saveSmokeBtn" style="padding:10px 16px; white-space:nowrap; background:#64748b; color:#e2e8f0;">Save Query</button>
@@ -275,7 +275,7 @@
     </div>
     <div id="regressionAdminPanel" style="display:none; margin-bottom:12px;">
       <div style="display:flex; gap:8px; flex-wrap:wrap;">
-        <input id="regressionJql" type="text" placeholder="Enter JQL for Regression tests…"2a4c70; color:#ffffff
+        <input id="regressionJql" type="text" placeholder="Enter JQL for Regression tests…"
           style="flex:1; min-width:300px; padding:10px 12px; border-radius:8px; font-size:13px;" />
         <button id="runRegressionBtn" style="padding:10px 16px; white-space:nowrap;">Run &amp; Publish</button>
         <button id="saveRegressionBtn" style="padding:10px 16px; white-space:nowrap; background:#64748b; color:#e2e8f0;">Save Query</button>
@@ -317,7 +317,7 @@
       <div id="bugMetrics" class="stats"></div>
 
       <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;">
-        <input id="bugJql" type="text" placeholder="Enter JQL for Bug Analysis…"2a4c70; color:#ffffff
+        <input id="bugJql" type="text" placeholder="Enter JQL for Bug Analysis…"
           style="flex:1; min-width:320px; padding:10px 12px; border-radius:8px; font-size:13px; border:1px solid var(--border); background:var(--bg); color:var(--text);" />
         <button id="bugRunBtn" style="padding:10px 16px; white-space:nowrap;">Run Query</button>
         <button id="bugSaveBtn" style="padding:10px 16px; white-space:nowrap; background:#64748b; color:#e2e8f0;">Save Query</button>
@@ -331,8 +331,9 @@
           <option value="">All Status</option><option value="Open">Open</option><option value="In Progress">In Progress</option><option value="Closed">Closed</option>
         </select>
         <select id="bugSeverityFilter" style="padding:10px 12px; border-radius:8px; border:1px solid var(--border); background:var(--bg); color:var(--text);">
-          <option value="">All Severity</option><option value="Critical">Critical</option>2a4c70; color:#ffffffHigh</option><option value="Medium">Medium</option><option value="Low">Low</option>
-        </select>228b5c; color:#ffffff
+          <option value="">All Severity</option><option value="Critical">Critical</option><option value="High">High</option><option value="Medium">Medium</option><option value="Low">Low</option>
+        </select>
+
         <button id="bugFilterBtn" style="padding:10px 16px; white-space:nowrap;">Apply Filter</button>
         <button id="bugLoadBtn" style="padding:10px 16px; white-space:nowrap; background:#64748b; color:#e2e8f0;">Reload Data</button>
         <button id="bugExportBtn" style="padding:10px 16px; white-space:nowrap; background:#059669; color:#e2e8f0;">Export CSV</button>

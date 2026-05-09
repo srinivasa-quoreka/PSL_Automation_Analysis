@@ -144,7 +144,6 @@ async function loadPublishedState() {
       }
       return;
     }
-    }
 
     let latestAt = '';
     for (const type of PSLDashboardState.sectionTypes) {
