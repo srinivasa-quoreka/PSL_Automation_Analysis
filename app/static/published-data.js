@@ -137,10 +137,13 @@ async function loadPublishedState() {
     }
     const snap = await res.json();
     if (!snap.published) {
-      sub.textContent = PSLDashboardState.adminMode
-        ? 'No data published yet. Enter JQL in each section and click Run & Publish.'
-        : 'No published data yet. Contact admin to publish data.';
+      if (sub) {
+        sub.textContent = PSLDashboardState.adminMode
+          ? 'No data published yet. Enter JQL in each section and click Run & Publish.'
+          : 'No published data yet. Contact admin to publish data.';
+      }
       return;
+    }
     }
 
     let latestAt = '';
@@ -173,14 +176,20 @@ async function loadPublishedState() {
       }
     }
 
-    sub.textContent = latestAt ? 'Last published: ' + latestAt : 'Published snapshot loaded.';
+    if (sub) {
+      sub.textContent = latestAt ? 'Last published: ' + latestAt : 'Published snapshot loaded.';
+    }
     if (err) {
       err.style.display = 'none';
     }
   } catch (e) {
-    err.style.display = 'block';
-    err.textContent = String(e.message || e);
-    sub.textContent = 'Failed to load published data.';
+    if (err) {
+      err.style.display = 'block';
+      err.textContent = String(e.message || e);
+    }
+    if (sub) {
+      sub.textContent = 'Failed to load published data.';
+    }
   }
 }
 

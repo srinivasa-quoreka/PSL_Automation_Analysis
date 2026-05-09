@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>PSL Automation - Test Step Dashboard</title>
+  <title>Quoreka - Test Automation Dashboard</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
   <script src="/static/app-shell.js?v=20260508b"></script>
   <script src="/static/published-data.js?v=20260508b"></script>
@@ -11,18 +11,18 @@
   <script src="/static/bug-analysis.js?v=20260508b"></script>
   <style>
     :root {
-      --bg: #0f172a;
-      --card: #1e293b;
-      --text: #e2e8f0;
-      --muted: #94a3b8;
-      --accent: #38bdf8;
-      --border: #334155;
+      --bg: #0a1829;
+      --card: #132b48;
+      --text: #ffffff;
+      --muted: #a8bcc9;
+      --accent: #4a90e2;
+      --border: #1f3a52;
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: var(--bg);
+      font-family: 'Gotham', 'IBM Plex Sans', 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, var(--bg) 0%, #0f2540 100%);
       color: var(--text);
       padding: 24px;
     }
@@ -58,16 +58,17 @@
       .section-body td:first-child { text-align: left; padding-right: 12px; font-weight: 500; }
     .scroll { max-height: 520px; overflow: auto; }
     button {
-      background: var(--accent); color: #0f172a; border: 0; padding: 8px 14px;
-      border-radius: 8px; font-weight: 600; cursor: pointer;
+      background: var(--accent); color: #ffffff; border: 0; padding: 8px 14px;
+      border-radius: 6px; font-weight: 600; cursor: pointer; font-family: inherit; font-size: 13px;
     }
     button:disabled { opacity: .5; cursor: wait; }
-    button:hover:not(:disabled) { background: #0ea5e9; }
+    button:hover:not(:disabled) { background: #3a7bc8; }
     input[type="text"] {
-      background: var(--bg); color: var(--text); border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.08); color: var(--text); border: 1px solid var(--border);
+      padding: 10px 12px; border-radius: 6px; font-size: 13px;
     }
     input[type="text"]:focus {
-      outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.1);
+      outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.15);
     }
     .err { background: #7f1d1d; color: #fee2e2; padding: 10px 14px; border-radius: 8px; margin-bottom: 16px; }
     .row { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
@@ -93,7 +94,7 @@
     }
     .modal-backdrop {
       position: fixed;
-      inset: 0;
+      inset: 0;0, 24, 41, 0.85
       background: rgba(15, 23, 42, 0.72);
       display: flex;
       align-items: center;
@@ -154,21 +155,25 @@
   </style>
 </head>
 <body>
-  <div class="row">
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; padding-bottom: 16px; border-bottom: 2px solid var(--border);">
     <div>
-      <h1>Test Step Distribution</h1>
-      <div class="sub" id="sub">Loading published data…</div>
+      <div style="font-size: 28px; font-weight: 700; letter-spacing: -0.8px; margin-bottom: 4px;">
+        <span style="color: var(--accent);">Quor</span><span style="color: #ffffff; font-weight: 400;">eka</span>
+      </div>
+      <div style="font-size: 18px; font-weight: 600; color: var(--text);">Test Automation Dashboard</div>
+      <div style="font-size: 12px; color: var(--muted); margin-top: 4px;">Test Step Distribution & Analysis</div>
     </div>
-    <button id="refresh">Refresh</button>
+    <button id="refresh" style="padding: 10px 18px; font-size: 14px;">🔄 Refresh All</button>
   </div>
 
   <div id="tabBar" class="row" style="justify-content: flex-start; gap: 8px; margin-bottom: 20px;">
-    <button id="tabPublished" onclick="if (typeof activateTab === 'function') activateTab('published')" style="background: #0ea5e9; color: #0f172a;">Published Data</button>
-    <button id="tabAdmin" onclick="if (typeof activateTab === 'function') activateTab('admin')" style="display:none; background: #475569; color: #e2e8f0;">Admin Runner</button>
-    <button id="tabBugAnalysis" onclick="if (typeof activateTab === 'function') activateTab('bug')" style="background: #475569; color: #e2e8f0;">Bug Analysis</button>
+    <button id="tabPublished" onclick="if (typeof activateTab === 'function') activateTab('published')" style="background: var(--accent); color: #ffffff;">Published Data</button>
+    <button id="tabAdmin" onclick="if (typeof activateTab === 'function') activateTab('admin')" style="display:none; background: #2a4c70; color: #ffffff;">Admin Runner</button>
+    <button id="tabBugAnalysis" onclick="if (typeof activateTab === 'function') activateTab('bug')" style="background: #2a4c70; color: #ffffff;">Bug Analysis</button>
   </div>
 
   <div id="err" class="err" style="display:none"></div>
+  <div id="sub" class="sub" style="display:none;"></div>
 
   <div id="linkedTestsModal" class="modal-backdrop" style="display:none;">
     <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="linkedTestsTitle">
@@ -194,7 +199,7 @@
     </div>
     <div id="sanityAdminPanel" style="display:none; margin-bottom:12px;">
       <div style="display:flex; gap:8px; flex-wrap:wrap;">
-        <input id="sanityJql" type="text" placeholder="Enter JQL for Sanity tests…"
+        <input id="sanityJql" type="text" placeholder="Enter JQL for Sanity tests…"2a4c70; color:#ffffff
           style="flex:1; min-width:300px; padding:10px 12px; border-radius:8px; font-size:13px;" />
         <button id="runSanityBtn" style="padding:10px 16px; white-space:nowrap;">Run &amp; Publish</button>
         <button id="saveSanityBtn" style="padding:10px 16px; white-space:nowrap; background:#64748b; color:#e2e8f0;">Save Query</button>
@@ -232,7 +237,7 @@
     </div>
     <div id="smokeAdminPanel" style="display:none; margin-bottom:12px;">
       <div style="display:flex; gap:8px; flex-wrap:wrap;">
-        <input id="smokeJql" type="text" placeholder="Enter JQL for Smoke tests…"
+        <input id="smokeJql" type="text" placeholder="Enter JQL for Smoke tests…"2a4c70; color:#ffffff
           style="flex:1; min-width:300px; padding:10px 12px; border-radius:8px; font-size:13px;" />
         <button id="runSmokeBtn" style="padding:10px 16px; white-space:nowrap;">Run &amp; Publish</button>
         <button id="saveSmokeBtn" style="padding:10px 16px; white-space:nowrap; background:#64748b; color:#e2e8f0;">Save Query</button>
@@ -270,7 +275,7 @@
     </div>
     <div id="regressionAdminPanel" style="display:none; margin-bottom:12px;">
       <div style="display:flex; gap:8px; flex-wrap:wrap;">
-        <input id="regressionJql" type="text" placeholder="Enter JQL for Regression tests…"
+        <input id="regressionJql" type="text" placeholder="Enter JQL for Regression tests…"2a4c70; color:#ffffff
           style="flex:1; min-width:300px; padding:10px 12px; border-radius:8px; font-size:13px;" />
         <button id="runRegressionBtn" style="padding:10px 16px; white-space:nowrap;">Run &amp; Publish</button>
         <button id="saveRegressionBtn" style="padding:10px 16px; white-space:nowrap; background:#64748b; color:#e2e8f0;">Save Query</button>
@@ -312,7 +317,7 @@
       <div id="bugMetrics" class="stats"></div>
 
       <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;">
-        <input id="bugJql" type="text" placeholder="Enter JQL for Bug Analysis…"
+        <input id="bugJql" type="text" placeholder="Enter JQL for Bug Analysis…"2a4c70; color:#ffffff
           style="flex:1; min-width:320px; padding:10px 12px; border-radius:8px; font-size:13px; border:1px solid var(--border); background:var(--bg); color:var(--text);" />
         <button id="bugRunBtn" style="padding:10px 16px; white-space:nowrap;">Run Query</button>
         <button id="bugSaveBtn" style="padding:10px 16px; white-space:nowrap; background:#64748b; color:#e2e8f0;">Save Query</button>
@@ -326,8 +331,8 @@
           <option value="">All Status</option><option value="Open">Open</option><option value="In Progress">In Progress</option><option value="Closed">Closed</option>
         </select>
         <select id="bugSeverityFilter" style="padding:10px 12px; border-radius:8px; border:1px solid var(--border); background:var(--bg); color:var(--text);">
-          <option value="">All Severity</option><option value="Critical">Critical</option><option value="High">High</option><option value="Medium">Medium</option><option value="Low">Low</option>
-        </select>
+          <option value="">All Severity</option><option value="Critical">Critical</option>2a4c70; color:#ffffffHigh</option><option value="Medium">Medium</option><option value="Low">Low</option>
+        </select>228b5c; color:#ffffff
         <button id="bugFilterBtn" style="padding:10px 16px; white-space:nowrap;">Apply Filter</button>
         <button id="bugLoadBtn" style="padding:10px 16px; white-space:nowrap; background:#64748b; color:#e2e8f0;">Reload Data</button>
         <button id="bugExportBtn" style="padding:10px 16px; white-space:nowrap; background:#059669; color:#e2e8f0;">Export CSV</button>
